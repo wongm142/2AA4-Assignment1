@@ -1,5 +1,6 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
+import org.apache.commons.cli.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -11,26 +12,57 @@ public class Main {
     private static final Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
-        System.out.println("** Starting Maze Runner");
+        logger.info("** Starting Maze Runner");
+
+        Options options = getParserOptions();
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd;
+        
         try {
-            System.out.println("**** Reading the maze from file " + args[0]);
-            BufferedReader reader = new BufferedReader(new FileReader(args[0]));
+            cmd = parser.parse(options, args);
+
+            String inputFilePath = cmd.getOptionValue("i");
+            logger.info("**** Reading the maze from file: {}", inputFilePath);
+
+            File inputFile = new File(inputFilePath);
+
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
             String line;
+
             while ((line = reader.readLine()) != null) {
+                StringBuilder outputLine = new StringBuilder();
                 for (int idx = 0; idx < line.length(); idx++) {
                     if (line.charAt(idx) == '#') {
-                        System.out.print("WALL ");
+                        outputLine.append("WALL ");
                     } else if (line.charAt(idx) == ' ') {
-                        System.out.print("PASS ");
+                        outputLine.append("PASS ");
                     }
                 }
-                System.out.print(System.lineSeparator());
+                logger.info(outputLine.toString());
             }
-        } catch(Exception e) {
-            System.err.println("/!\\ An error has occured /!\\");
+        } catch (Exception e){
+            logger.error("/!\\ An error has occured /!\\");
         }
-        System.out.println("**** Computing path");
-        System.out.println("PATH NOT COMPUTED");
-        System.out.println("** End of MazeRunner");
+
+        logger.info("**** Computing path");
+        logger.info("PATH NOT COMPUTED");
+        logger.info("** End of Maze Runner");
     }
+
+    /**
+     * Get options for CLI parser
+     * 
+     * @return CLI parser options
+     */
+
+    private static Options getParserOptions(){
+        Options options = new Options();
+        Option fileOption = new Option("i", true, "File containing maze");
+        fileOption.setRequired(true);
+    
+        options.addOption(fileOption);
+        
+        return options;
+    }
+
 }
