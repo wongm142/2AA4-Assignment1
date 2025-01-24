@@ -22,6 +22,11 @@ public class Main {
             cmd = parser.parse(options, args);
 
             String filePath = cmd.getOptionValue("i");
+            MazeSolver solver = new RightHandAlgo();
+            String solution = solver.solveMaze(maze);
+
+            logger.info("Solution: " + solution);
+
             Maze maze = new Maze(filePath);
 
         } catch (Exception e){
