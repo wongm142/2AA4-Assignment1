@@ -8,7 +8,6 @@ public class Maze {
     private int mazeHeight = 0;
 
     public void addLine(ArrayList<Point> lineInput) {
-
         if (mazeWidth == 0) {
             mazeWidth = lineInput.size();
         }

@@ -14,12 +14,13 @@ public class Main {
 
     public static void main(String[] args) {
         logger.info("** Starting Maze Runner");
-        
+
         try {
             Configuration config = configure(args);
 
-            logger.info("**** Reading the maze from file " + config.input_maze());
-            MazeReader reader = new MazeReader(config.input_maze());
+            logger.info("**** Reading the maze from file " + config.inputMaze());
+            
+            MazeReader reader = new MazeReader(config.inputMaze());
             Maze maze = reader.readMaze();
 
             logger.info("**** Computing path");
@@ -44,11 +45,11 @@ public class Main {
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
 
-        String maze  = cmd.getOptionValue("i");
+        String maze = cmd.getOptionValue("i");
 
         return new Configuration(maze);
     }
 
-    private record Configuration(String input_maze) {}
+    private record Configuration(String inputMaze) {}
 
 }

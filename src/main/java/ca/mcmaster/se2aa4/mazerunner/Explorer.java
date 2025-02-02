@@ -9,33 +9,25 @@ public class Explorer {
   private static final Logger logger = LogManager.getLogger();
 
   private Maze maze;
-  private int xCoords;
-  private int yCoords;
+  private Coordinate coords = new Coordinate();
   private String path;
   private Direction direction;
-  private int startCoords;
-  private int exitCoords;
+  private Coordinate startCoords = new Coordinate();
+  private Coordinate endCoords = new Coordinate();
 
   public Explorer(Maze mazeInput){
     maze = mazeInput;
     path = "";
-    startCoords = findStart();
-    exitCoords = findExit();
-    logger.info("Entrance y coords: " + startCoords);
-    logger.info("Exit y coords: " + exitCoords);
-  }
-
-  public int getXCoords(){
-    return xCoords;
-  }
-
-  public int getYCoords(){
-    return yCoords;
+    startCoords.set(0, findStart());
+    logger.info("**** Entrance y coords: " + startCoords.y());
+    endCoords.set(maze.width() - 1, findExit());
+    logger.info("**** Exit y coords: " + endCoords.y());
   }
 
   private int findStart(){
     ArrayList<Point> entryColumn = maze.getColumn(0);
     for (int i = 0; i < entryColumn.size(); i++) {
+      System.out.println(entryColumn.get(i));
       if(entryColumn.get(i) == Point.PASS) {
         return i;
       }
@@ -57,6 +49,18 @@ public class Explorer {
 
   }
 
+  public Coordinate coords() {
+    Coordinate tempCoord = new Coordinate();
+    tempCoord.set(coords.x(), coords.y());
+    return tempCoord;
+  }
+
+  public Coordinate getEnd() {
+    Coordinate end = new Coordinate();
+    end.set(endCoords.x(), endCoords.y());
+    return end;
+  }
+
   public String getPath(){
     return path;
   }
@@ -65,19 +69,19 @@ public class Explorer {
     path = path + "F";
 
     if (direction == Direction.UP){
-      yCoords++;
+      coords.setY(coords.y() + 1);
     }
 
     else if (direction == Direction.DOWN){
-      yCoords--;
+      coords.setY(coords.y() - 1);
     }
 
     else if (direction == Direction.LEFT){
-      xCoords--;
+      coords.setX(coords.x() + 1);
     }
 
     else if (direction == Direction.RIGHT){
-      xCoords++;
+      coords.setX(coords.x() - 1);
     }
   }
 
@@ -119,6 +123,10 @@ public class Explorer {
     else if (direction == Direction.RIGHT){
       direction = Direction.UP;
     }
+  }
+
+  public boolean reachedExit() {
+    return false;
   }
 
   enum Direction {

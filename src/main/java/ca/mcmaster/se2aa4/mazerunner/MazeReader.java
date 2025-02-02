@@ -32,7 +32,7 @@ public class MazeReader {
             }
             maze.addLine(line);
         }
-        
+
         read.close();
 
         for (int i = 0; i < 5; i++) {
