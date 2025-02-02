@@ -4,6 +4,25 @@ public class Coordinate {
 	private int xCoords;
 	private int yCoords;
 
+  public Coordinate(){
+    xCoords = 0;
+    yCoords = 0;
+  }
+
+	public Coordinate(int x, int y) {
+		xCoords = x();
+		yCoords = y();
+	}
+
+  public Coordinate(Coordinate coordinateCopy) {
+		xCoords = coordinateCopy.x();
+		yCoords = coordinateCopy.y();
+	}
+
+	public String toString() {
+		return String.valueOf(xCoords) + "," + String.valueOf(yCoords);
+	}
+
 	public void set(int x, int y) {
 		xCoords = x;
 		yCoords = y;

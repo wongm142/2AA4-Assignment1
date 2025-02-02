@@ -1,10 +1,15 @@
 package ca.mcmaster.se2aa4.mazerunner;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import java.io.ObjectInputFilter.Config;
 import java.lang.module.Configuration;
 import org.apache.commons.cli.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,7 +35,7 @@ public class Main {
             System.out.println("Solution: " + solution);
         } 
         
-        catch(Exception e) {
+        catch(IOException | ParseException e) {
             logger.error(e.getMessage());
             System.exit(1);
         }

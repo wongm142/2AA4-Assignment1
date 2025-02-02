@@ -9,26 +9,33 @@ public class Explorer {
   private static final Logger logger = LogManager.getLogger();
 
   private Maze maze;
-  private Coordinate coords = new Coordinate();
+  private Coordinate coords;
   private String path;
   private Direction direction;
-  private Coordinate startCoords = new Coordinate();
-  private Coordinate endCoords = new Coordinate();
+  private Coordinate startCoords;
+  private Coordinate endCoords;
 
-  public Explorer(Maze mazeInput){
+  public Explorer(Maze mazeInput) {
     maze = mazeInput;
     path = "";
-    startCoords.set(0, findStart());
+    
+    direction = Direction.RIGHT;
+    startCoords = new Coordinate(0, findStart());
     logger.info("**** Entrance y coords: " + startCoords.y());
-    endCoords.set(maze.width() - 1, findExit());
+
+    endCoords = new Coordinate(maze.width() - 1, findExit());
     logger.info("**** Exit y coords: " + endCoords.y());
+
+    coords = new Coordinate(startCoords);
+    logger.info("Coordinates are: " + coords.toString());
   }
 
-  private int findStart(){
-    ArrayList<Point> entryColumn = maze.getColumn(0);
+  private int findStart() {
+    ArrayList<Tile> entryColumn = maze.getColumn(0);
     for (int i = 0; i < entryColumn.size(); i++) {
       System.out.println(entryColumn.get(i));
-      if(entryColumn.get(i) == Point.PASS) {
+
+      if (entryColumn.get(i) == Tile.PASS) {
         return i;
       }
     }
@@ -37,10 +44,10 @@ public class Explorer {
     return 0;
   }
 
-  private int findExit(){
-    ArrayList<Point> entryColumn = maze.getColumn(maze.width() - 1);
+  private int findExit() {
+    ArrayList<Tile> entryColumn = maze.getColumn(maze.width() - 1);
     for (int i = 0; i < entryColumn.size(); i++) {
-      if(entryColumn.get(i) == Point.PASS) {
+      if(entryColumn.get(i) == Tile.PASS) {
         return i;
       }
     }
@@ -50,14 +57,12 @@ public class Explorer {
   }
 
   public Coordinate coords() {
-    Coordinate tempCoord = new Coordinate();
-    tempCoord.set(coords.x(), coords.y());
+    Coordinate tempCoord = new Coordinate(coords);
     return tempCoord;
   }
 
   public Coordinate getEnd() {
-    Coordinate end = new Coordinate();
-    end.set(endCoords.x(), endCoords.y());
+    Coordinate end = new Coordinate(endCoords);
     return end;
   }
 
@@ -65,23 +70,27 @@ public class Explorer {
     return path;
   }
 
+  public Direction direction(){
+    return direction;
+  }
+
   public void moveForward(){
     path = path + "F";
 
     if (direction == Direction.UP){
-      coords.setY(coords.y() + 1);
-    }
-
-    else if (direction == Direction.DOWN){
       coords.setY(coords.y() - 1);
     }
 
+    else if (direction == Direction.DOWN){
+      coords.setY(coords.y() + 1);
+    }
+
     else if (direction == Direction.LEFT){
-      coords.setX(coords.x() + 1);
+      coords.setX(coords.x() - 1);
     }
 
     else if (direction == Direction.RIGHT){
-      coords.setX(coords.x() - 1);
+      coords.setX(coords.x() + 1);
     }
   }
 
@@ -126,13 +135,16 @@ public class Explorer {
   }
 
   public boolean reachedExit() {
-    return false;
+    if (coords.x() == endCoords.x() & coords.y() == endCoords.y()){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
-  enum Direction {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-  }
+}
+
+enum Direction {
+  UP, DOWN, LEFT, RIGHT
 }
