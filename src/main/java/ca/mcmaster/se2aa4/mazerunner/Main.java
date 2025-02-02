@@ -35,7 +35,7 @@ public class Main {
             System.out.println("Solution: " + solution);
         } 
         
-        catch(IOException | ParseException e) {
+        catch(Exception e) {
             logger.error(e.getMessage());
             System.exit(1);
         }

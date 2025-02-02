@@ -10,8 +10,8 @@ public class Coordinate {
   }
 
 	public Coordinate(int x, int y) {
-		xCoords = x();
-		yCoords = y();
+		xCoords = x;
+		yCoords = y;
 	}
 
   public Coordinate(Coordinate coordinateCopy) {

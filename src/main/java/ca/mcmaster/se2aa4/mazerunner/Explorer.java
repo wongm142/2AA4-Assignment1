@@ -10,14 +10,13 @@ public class Explorer {
 
   private Maze maze;
   private Coordinate coords;
-  private String path;
   private Direction direction;
   private Coordinate startCoords;
   private Coordinate endCoords;
+  private TraversalLogger pathLogger = new TraversalLogger();
 
-  public Explorer(Maze mazeInput) {
+  public Explorer(Maze mazeInput) throws EntranceException, ExitException {
     maze = mazeInput;
-    path = "";
     
     direction = Direction.RIGHT;
     startCoords = new Coordinate(0, findStart());
@@ -30,7 +29,7 @@ public class Explorer {
     logger.info("Coordinates are: " + coords.toString());
   }
 
-  private int findStart() {
+  private int findStart() throws EntranceException {
     ArrayList<Tile> entryColumn = maze.getColumn(0);
     for (int i = 0; i < entryColumn.size(); i++) {
       System.out.println(entryColumn.get(i));
@@ -40,19 +39,19 @@ public class Explorer {
       }
     }
 
-    System.out.println("Unable to find maze entrance");
-    return 0;
+    throw new EntranceException("Unable to find maze entrance");
+
   }
 
-  private int findExit() {
+  private int findExit() throws ExitException {
     ArrayList<Tile> entryColumn = maze.getColumn(maze.width() - 1);
     for (int i = 0; i < entryColumn.size(); i++) {
       if(entryColumn.get(i) == Tile.PASS) {
         return i;
       }
     }
-    System.out.println("Unable to find maze exit");
-    return 0;
+    
+    throw new ExitException("Unable to find maze exit");
 
   }
 
@@ -61,13 +60,8 @@ public class Explorer {
     return tempCoord;
   }
 
-  public Coordinate getEnd() {
-    Coordinate end = new Coordinate(endCoords);
-    return end;
-  }
-
-  public String getPath(){
-    return path;
+  public String canonicalPath(){
+    return pathLogger.getCanonical();
   }
 
   public Direction direction(){
@@ -75,7 +69,7 @@ public class Explorer {
   }
 
   public void moveForward(){
-    path = path + "F";
+    pathLogger.forward();
 
     if (direction == Direction.UP){
       coords.setY(coords.y() - 1);
@@ -95,7 +89,7 @@ public class Explorer {
   }
 
   public void turnRight(){
-    path = path + "R";
+    pathLogger.right();
 
     if (direction == Direction.UP){
       direction = Direction.RIGHT;
@@ -115,7 +109,7 @@ public class Explorer {
   }
 
   public void turnLeft(){
-    path = path + "L";
+    pathLogger.left();
 
     if (direction == Direction.UP){
       direction = Direction.LEFT;
