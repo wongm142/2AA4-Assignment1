@@ -49,6 +49,22 @@ public class TraversalLogger {
         }
         return canonical;
     }
+    
+    public String getFactorized(){
+        String factorized = "";
+        
+        for (ArrayList<Character> chain : path) {
+            if (chain.size() > 1) {
+                factorized = factorized + String.valueOf(chain.size()) + chain.get(0) + ' ';
+            } 
+            
+            else {
+                factorized = factorized + chain.get(0) + ' ';
+            }
+        }
+
+        return factorized;
+    }
 }
 
 enum Move {

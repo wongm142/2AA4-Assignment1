@@ -64,6 +64,10 @@ public class Explorer {
     return pathLogger.getCanonical();
   }
 
+  public String factorizedPath(){
+    return pathLogger.getFactorized();
+  }
+
   public Direction direction(){
     return direction;
   }

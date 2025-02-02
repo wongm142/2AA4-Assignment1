@@ -89,7 +89,7 @@ public class RightHandAlgo implements MazeSolver{
 
             }
 
-            return explorer.canonicalPath();
+            return explorer.factorizedPath();
 
         } catch (Exception e) {
             logger.error(e.getMessage());
