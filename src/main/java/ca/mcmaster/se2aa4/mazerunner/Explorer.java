@@ -3,6 +3,8 @@ package ca.mcmaster.se2aa4.mazerunner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+
 public class Explorer {
   private static final Logger logger = LogManager.getLogger();
 
@@ -32,11 +34,27 @@ public class Explorer {
   }
 
   private int findStart(){
-    return 2;
+    ArrayList<Point> entryColumn = maze.getColumn(0);
+    for (int i = 0; i < entryColumn.size(); i++) {
+      if(entryColumn.get(i) == Point.PASS) {
+        return i;
+      }
+    }
+
+    System.out.println("Unable to find maze entrance");
+    return 0;
   }
 
   private int findExit(){
-    return 2;
+    ArrayList<Point> entryColumn = maze.getColumn(maze.width() - 1);
+    for (int i = 0; i < entryColumn.size(); i++) {
+      if(entryColumn.get(i) == Point.PASS) {
+        return i;
+      }
+    }
+    System.out.println("Unable to find maze exit");
+    return 0;
+
   }
 
   public String getPath(){
@@ -63,4 +81,50 @@ public class Explorer {
     }
   }
 
+  public void turnRight(){
+    path = path + "R";
+
+    if (direction == Direction.UP){
+      direction = Direction.RIGHT;
+    }
+
+    else if (direction == Direction.DOWN){
+      direction = Direction.LEFT;
+    }
+
+    else if (direction == Direction.LEFT){
+      direction = Direction.UP;
+    }
+
+    else if (direction == Direction.RIGHT){
+      direction = Direction.LEFT;
+    }
+  }
+
+  public void turnLeft(){
+    path = path + "L";
+
+    if (direction == Direction.UP){
+      direction = Direction.LEFT;
+    }
+
+    else if (direction == Direction.DOWN){
+      direction = Direction.RIGHT;
+    }
+
+    else if (direction == Direction.LEFT){
+      direction = Direction.DOWN;
+    }
+
+    else if (direction == Direction.RIGHT){
+      direction = Direction.UP;
+    }
+  }
+
+  enum Direction {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+  }
 }

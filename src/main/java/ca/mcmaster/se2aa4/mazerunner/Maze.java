@@ -1,32 +1,58 @@
 package ca.mcmaster.se2aa4.mazerunner;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.util.ArrayList;
 
 public class Maze {
-    private static final Logger logger = LogManager.getLogger();
 
-    public Maze(String filePath) throws Exception {
-      logger.debug("Reading maze from the file " + filePath);
-      BufferedReader reader = new BufferedReader(new FileReader(filePath));
+    private ArrayList<ArrayList<Point>> maze = new ArrayList<ArrayList<Point>>();
+    private int mazeWidth = 0;
+    private int mazeHeight = 0;
 
-      String line;
-      while ((line = reader.readLine()) != null) {
-      StringBuilder outputLine = new StringBuilder();
-      for (int idx = 0; idx < line.length(); idx++) {
-          if (line.charAt(idx) == '#') {
-              outputLine.append("WALL ");
-          } else if (line.charAt(idx) == ' ') {
-              outputLine.append("PASS ");
-          }
-      }
+    public void addLine(ArrayList<Point> lineInput) {
 
-      logger.info(outputLine.toString());
+        if (mazeWidth == 0) {
+            mazeWidth = lineInput.size();
+        }
+        else if (mazeWidth != lineInput.size()){
+            throw new IllegalArgumentException("Input length of " + lineInput.size() + " illegal for maze of width " + mazeWidth);
+        }
 
-      }
+        ArrayList<Point> line = new ArrayList<Point>();
+        for (Point point : lineInput) {
+            line.add(point);
+        }
+
+        maze.add(line);
+        mazeHeight++;
     }
 
+    public int height() {
+        return mazeHeight;
+    }
+
+    public int width() {
+        return mazeWidth;
+    }
+
+    public Point getPoint(int xCoords, int yCoords) {
+        return maze.get(yCoords).get(xCoords);
+    }
+
+    public ArrayList<Point> getLine(int lineNumber) {
+        return maze.get(lineNumber);
+    }
+
+    public ArrayList<Point> getColumn(int colNum) {
+
+        ArrayList<Point> mazeColumn = new ArrayList<Point>();
+
+        for (int i = 0; i < mazeWidth; i++) {
+            mazeColumn.add(maze.get(i).get(colNum));
+        }
+
+        return mazeColumn;
+    }
+}
+
+enum Point {
+    PASS, WALL
 }
