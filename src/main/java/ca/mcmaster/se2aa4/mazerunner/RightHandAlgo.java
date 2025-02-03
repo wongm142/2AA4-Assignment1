@@ -5,6 +5,10 @@ import org.apache.logging.log4j.Logger;
 public class RightHandAlgo implements MazeSolver{
     private static final Logger logger = LogManager.getLogger();
 
+    private boolean isValidCoordinate(Coordinate coord, Maze maze){
+        return coord.x() >= 0 && coord.x() < maze.width() && coord.y() >= 0 && coord.y() < maze.height();
+    }
+
     @Override
     public String solveMaze(Maze maze) {
         try{
@@ -20,7 +24,7 @@ public class RightHandAlgo implements MazeSolver{
                 logger.info(explorer.coords().x() + "," + explorer.coords().y());
 
                 if (explorer.direction() == Direction.UP) {
-                    logger.info("direction is up");
+                    // logger.info("direction is up");
                     rightCoord.setX(rightCoord.x() + 1);
                     forwardCoord.setY(forwardCoord.y() - 1);
                     leftCoord.setX(leftCoord.x() - 1);
@@ -28,7 +32,7 @@ public class RightHandAlgo implements MazeSolver{
                 } 
                 
                 else if (explorer.direction() == Direction.DOWN) {
-                    logger.info("direction is down");
+                    // logger.info("direction is down");
                     rightCoord.setX(rightCoord.x() - 1);
                     forwardCoord.setY(forwardCoord.y() + 1);
                     leftCoord.setX(leftCoord.x() + 1);
@@ -36,7 +40,7 @@ public class RightHandAlgo implements MazeSolver{
                 } 
                 
                 else if (explorer.direction() == Direction.RIGHT) {
-                    logger.info("direction is right");
+                    // logger.info("direction is right");
                     rightCoord.setY(rightCoord.y() + 1);
                     forwardCoord.setX(forwardCoord.x() + 1);
                     leftCoord.setY(leftCoord.y() - 1);
@@ -44,35 +48,35 @@ public class RightHandAlgo implements MazeSolver{
                 } 
                 
                 else if (explorer.direction() == Direction.LEFT) {
-                    logger.info("direction is left");
+                    // logger.info("direction is left");
                     rightCoord.setY(rightCoord.y() - 1);
                     forwardCoord.setX(forwardCoord.x() - 1);
                     leftCoord.setY(leftCoord.y() + 1);
                     behindCoord.setX(behindCoord.x() + 1);
                 }
 
-                logger.info("Switch Statement exited");
+                // logger.info("Switch Statement exited");
                 logger.info(explorer.coords().x() + "," + explorer.coords().y());
 
-                if (maze.getPoint(rightCoord) == Tile.PASS) {
-                    logger.info("Turning Right");
+                if (isValidCoordinate(rightCoord, maze) && maze.getPoint(rightCoord) == Tile.PASS) {
+                    // logger.info("Turning Right");
                     explorer.turnRight();
                     explorer.moveForward();
                 } 
                 
                 else if (maze.getPoint(forwardCoord) == Tile.PASS) {
-                    logger.info("Moving Forwards");
+                    // logger.info("Moving Forwards");
                     explorer.moveForward();
                 } 
                 
                 else if (maze.getPoint(leftCoord) == Tile.PASS) {
-                    logger.info("Turning Left");
+                    // logger.info("Turning Left");
                     explorer.turnLeft();
                     explorer.moveForward();
                 } 
                 
                 else if (maze.getPoint(behindCoord) == Tile.PASS) {
-                    logger.info("Turning Around");
+                    // logger.info("Turning Around");
                     explorer.turnRight();
                     explorer.turnRight();
                     explorer.moveForward();
@@ -89,7 +93,7 @@ public class RightHandAlgo implements MazeSolver{
 
             }
 
-            return explorer.canonicalPath();
+            return explorer.factorizedPath();
 
         } catch (Exception e) {
             logger.error(e.getMessage());

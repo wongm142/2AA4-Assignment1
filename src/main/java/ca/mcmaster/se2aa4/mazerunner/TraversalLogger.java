@@ -8,8 +8,12 @@ public class TraversalLogger {
 
     public void forward() {
         if (lastMove == Move.FORWARD) {
-            path.getLast().add('F');
-        } else {
+            if (!path.isEmpty()){
+                path.get(path.size() - 1).add('F');
+            }
+        } 
+        
+        else {
             ArrayList<Character> tempList = new ArrayList<Character>();
             tempList.add('F');
             path.add(tempList);
@@ -20,7 +24,9 @@ public class TraversalLogger {
     public void right() {
         if (lastMove == Move.RIGHT) {
             path.getLast().add('R');
-        } else {
+        } 
+        
+        else {
             ArrayList<Character> tempList = new ArrayList<Character>();
             tempList.add('R');
             path.add(tempList);
@@ -31,7 +37,9 @@ public class TraversalLogger {
     public void left() {
         if (lastMove == Move.LEFT) {
             path.getLast().add('L');
-        } else {
+        } 
+        
+        else {
             ArrayList<Character> tempList = new ArrayList<Character>();
             tempList.add('L');
             path.add(tempList);

@@ -11,51 +11,28 @@ public class Explorer {
   private Maze maze;
   private Coordinate coords;
   private Direction direction;
-  private SolveDirection solvingDirection;
+  private Direction solvingDirection;
   private Coordinate startCoords;
   private Coordinate endCoords;
-  private TraversalLogger pathLogger = new TraversalLogger();
+  private TraversalLogger pathLogger;
+  private EntranceFinder finder;
 
   public Explorer(Maze mazeInput) throws EntranceException, ExitException {
     maze = mazeInput;
+    finder = new EntranceFinder(mazeInput);
+    pathLogger = new TraversalLogger();
     
     direction = Direction.RIGHT;
-    startCoords = new Coordinate(0, findStart());
+    startCoords = new Coordinate(0, finder.findWestEntrance());
     logger.info("**** Entrance y coords: " + startCoords.y());
 
-    endCoords = new Coordinate(maze.width() - 1, findExit());
+    endCoords = new Coordinate(maze.width() - 1, finder.findEastEntrance());
     logger.info("**** Exit y coords: " + endCoords.y());
 
     coords = new Coordinate(startCoords);
     logger.info("Coordinates are: " + coords.toString());
 
-    solvingDirection = SolveDirection.EAST;
-  }
-
-  private int findStart() throws EntranceException {
-    ArrayList<Tile> entryColumn = maze.getColumn(0);
-    for (int i = 0; i < entryColumn.size(); i++) {
-      System.out.println(entryColumn.get(i));
-
-      if (entryColumn.get(i) == Tile.PASS) {
-        return i;
-      }
-    }
-
-    throw new EntranceException("Unable to find maze entrance");
-
-  }
-
-  private int findExit() throws ExitException {
-    ArrayList<Tile> entryColumn = maze.getColumn(maze.width() - 1);
-    for (int i = 0; i < entryColumn.size(); i++) {
-      if(entryColumn.get(i) == Tile.PASS) {
-        return i;
-      }
-    }
-    
-    throw new ExitException("Unable to find maze exit");
-
+    solvingDirection = Direction.RIGHT;
   }
 
   public void switchSides() {
@@ -64,14 +41,14 @@ public class Explorer {
     startCoords = startNew;
     endCoords = endNew;
     
-    if (solvingDirection == SolveDirection.EAST) {
+    if (solvingDirection == Direction.RIGHT) {
       direction = Direction.LEFT;
-      solvingDirection = SolveDirection.WEST;
+      solvingDirection = Direction.LEFT;
     } 
     
     else {
       direction = Direction.RIGHT;
-      solvingDirection = SolveDirection.EAST;
+      solvingDirection = Direction.RIGHT;
     }
   }
   
@@ -79,7 +56,7 @@ public class Explorer {
     coords = new Coordinate(startCoords);
     pathLogger.clear();
     
-    if (solvingDirection == SolveDirection.EAST) {
+    if (solvingDirection == Direction.RIGHT) {
       direction = Direction.RIGHT;
     } 
     
@@ -166,7 +143,7 @@ public class Explorer {
   }
 
   public boolean reachedExit() {
-    if (coords.x() == endCoords.x() & coords.y() == endCoords.y()){
+    if (coords.x() == endCoords.x() && coords.y() == endCoords.y()){
       return true;
     }
     else{
@@ -178,8 +155,4 @@ public class Explorer {
 
 enum Direction {
   UP, DOWN, LEFT, RIGHT
-}
-
-enum SolveDirection {
-  EAST, WEST
 }

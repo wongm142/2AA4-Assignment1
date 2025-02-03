@@ -20,8 +20,19 @@ public class MazeReader {
         String lineInput;
         ArrayList<Tile> line = new ArrayList<Tile>();
 
+        int expectedWidth = -1;
+
         while ((lineInput = read.readLine()) != null) {
             line.clear();
+
+            if (expectedWidth == -1){
+                expectedWidth = lineInput.length();
+            }
+
+            if (lineInput.length() < expectedWidth){
+                int paddingLength = expectedWidth - lineInput.length();
+                lineInput = String.format("%-" + expectedWidth + "s", lineInput);
+            }
 
             for (int i = 0; i < lineInput.length(); i++) {
                 if (lineInput.charAt(i) == '#') {
@@ -30,6 +41,8 @@ public class MazeReader {
                     line.add(Tile.PASS);
                 }
             }
+
+
             maze.addLine(line);
         }
 

@@ -17,7 +17,7 @@ public class PathValidator {
 
 		boolean correctWest = runPath(path, explorer);
     
-		if (correctEast | correctWest) {
+		if (correctEast || correctWest) {
 			return true;
 		} 
     
@@ -66,11 +66,11 @@ public class PathValidator {
   private boolean executeMove(char move, Explorer explorer) {
     switch (move) {
         case 'F':
-            explorer.moveForward();
             if (maze.getPoint(explorer.coords()) == Tile.WALL) {
                 return false;
             }
-
+            
+            explorer.moveForward();
             break;
 
         case 'R':
