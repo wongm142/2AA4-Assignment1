@@ -6,22 +6,28 @@ public class RightHandAlgo implements MazeSolver{
     private static final Logger logger = LogManager.getLogger();
 
     private boolean isValidCoordinate(Coordinate coord, Maze maze){
-        return coord.x() >= 0 && coord.x() < maze.width() && coord.y() >= 0 && coord.y() < maze.height();
+        boolean valid = coord.x() >= 0 && coord.x() < maze.width() && coord.y() >= 0 && coord.y() < maze.height();
+    
+        if (!valid) {
+            logger.warn("Invalid coordinate: (" + coord.x() + ", " + coord.y() + ")");
+        }
+
+        return valid;
+
     }
 
     @Override
     public String solveMaze(Maze maze) {
+        Explorer explorer = null;
+
         try{
-            Explorer explorer = new Explorer(maze);
-            logger.info(explorer.coords().x() + "," + explorer.coords().y());
+            explorer = new Explorer(maze);
 
             while (!explorer.reachedExit()) {
                 Coordinate rightCoord = new Coordinate(explorer.coords());
                 Coordinate forwardCoord = new Coordinate(explorer.coords());
                 Coordinate leftCoord = new Coordinate(explorer.coords());
                 Coordinate behindCoord = new Coordinate(explorer.coords());
-
-                logger.info(explorer.coords().x() + "," + explorer.coords().y());
 
                 if (explorer.direction() == Direction.UP) {
                     // logger.info("direction is up");
@@ -55,8 +61,6 @@ public class RightHandAlgo implements MazeSolver{
                     behindCoord.setX(behindCoord.x() + 1);
                 }
 
-                // logger.info("Switch Statement exited");
-                logger.info(explorer.coords().x() + "," + explorer.coords().y());
 
                 if (isValidCoordinate(rightCoord, maze) && maze.getPoint(rightCoord) == Tile.PASS) {
                     // logger.info("Turning Right");
@@ -64,19 +68,18 @@ public class RightHandAlgo implements MazeSolver{
                     explorer.moveForward();
                 } 
                 
-                else if (maze.getPoint(forwardCoord) == Tile.PASS) {
+                else if (isValidCoordinate(forwardCoord, maze) && maze.getPoint(forwardCoord) == Tile.PASS) {
                     // logger.info("Moving Forwards");
                     explorer.moveForward();
                 } 
                 
-                else if (maze.getPoint(leftCoord) == Tile.PASS) {
+                else if (isValidCoordinate(leftCoord, maze) && maze.getPoint(leftCoord) == Tile.PASS) {
                     // logger.info("Turning Left");
                     explorer.turnLeft();
                     explorer.moveForward();
                 } 
                 
-                else if (maze.getPoint(behindCoord) == Tile.PASS) {
-                    // logger.info("Turning Around");
+                else if (isValidCoordinate(behindCoord, maze) && maze.getPoint(behindCoord) == Tile.PASS) {
                     explorer.turnRight();
                     explorer.turnRight();
                     explorer.moveForward();

@@ -7,6 +7,22 @@ public class ArrayListMaze implements Maze {
     private int mazeWidth = 0;
     private int mazeHeight = 0;
 
+
+    public void printMaze() {
+        for (int y = 0; y < mazeHeight; y++) {
+            StringBuilder line = new StringBuilder();
+            for (int x = 0; x < mazeWidth; x++) {
+                Tile tile = maze.get(y).get(x);
+                if (tile == Tile.WALL) {
+                    line.append("#");
+                } else if (tile == Tile.PASS) {
+                    line.append(" ");
+                }
+            }
+            // System.out.println(line);
+        }
+    }
+
     public void addLine(ArrayList<Tile> lineInput) {
         if (mazeWidth == 0) {
             mazeWidth = lineInput.size();
@@ -44,7 +60,7 @@ public class ArrayListMaze implements Maze {
 
         ArrayList<Tile> mazeColumn = new ArrayList<Tile>();
 
-        for (int i = 0; i < mazeWidth; i++) {
+        for (int i = 0; i < mazeHeight; i++) {
             mazeColumn.add(maze.get(i).get(colNum));
         }
 

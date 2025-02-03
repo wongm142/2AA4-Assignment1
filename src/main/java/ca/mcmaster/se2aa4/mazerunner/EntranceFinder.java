@@ -9,6 +9,7 @@ public class EntranceFinder {
 
     public int findWestEntrance() throws EntranceException {
         ArrayList<Tile> entryColumn = maze.getColumn(0);
+
         for (int i = 0; i < entryColumn.size(); i++) {
             if(entryColumn.get(i) == Tile.PASS) {
                 return i;
@@ -19,6 +20,7 @@ public class EntranceFinder {
 
     public int findEastEntrance() throws EntranceException {
         ArrayList<Tile> entryColumn = maze.getColumn(maze.width() - 1);
+
         for (int i = 0; i < entryColumn.size(); i++) {
             if(entryColumn.get(i) == Tile.PASS) {
                 return i;

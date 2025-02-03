@@ -23,14 +23,27 @@ public class Explorer {
     pathLogger = new TraversalLogger();
     
     direction = Direction.RIGHT;
-    startCoords = new Coordinate(0, finder.findWestEntrance());
-    logger.info("**** Entrance y coords: " + startCoords.y());
 
-    endCoords = new Coordinate(maze.width() - 1, finder.findEastEntrance());
-    logger.info("**** Exit y coords: " + endCoords.y());
+    int westEntranceY = finder.findWestEntrance();
+    int eastEntranceY = finder.findEastEntrance();
+
+    if (westEntranceY < 0 || westEntranceY >= maze.height()) {
+        throw new EntranceException("Invalid west entrance: " + westEntranceY);
+    }
+
+    if (eastEntranceY < 0 || eastEntranceY >= maze.height()) {
+        throw new EntranceException("Invalid east entrance: " + eastEntranceY);
+    }
+
+
+    startCoords = new Coordinate(0, westEntranceY);
+    // logger.info("**** Entrance y coords: " + startCoords.y());
+
+    endCoords = new Coordinate(maze.width() - 1, eastEntranceY);
+    // logger.info("**** Exit y coords: " + endCoords.y());
 
     coords = new Coordinate(startCoords);
-    logger.info("Coordinates are: " + coords.toString());
+    // logger.info("Coordinates are: " + coords.toString());
 
     solvingDirection = Direction.RIGHT;
   }
@@ -85,20 +98,24 @@ public class Explorer {
   public void moveForward(){
     pathLogger.forward();
 
-    if (direction == Direction.UP){
+    if (direction == Direction.UP && coords.y() > 0){
       coords.setY(coords.y() - 1);
     }
 
-    else if (direction == Direction.DOWN){
+    else if (direction == Direction.DOWN && coords.y() < maze.height() - 1){
       coords.setY(coords.y() + 1);
     }
 
-    else if (direction == Direction.LEFT){
+    else if (direction == Direction.LEFT && coords.x() > 0){
       coords.setX(coords.x() - 1);
     }
 
-    else if (direction == Direction.RIGHT){
+    else if (direction == Direction.RIGHT && coords.x() < maze.width() - 1){
       coords.setX(coords.x() + 1);
+    }
+
+    else{
+      logger.error("Out of bounds move attempted: " + coords.x() + ", " + coords.y());
     }
   }
 
@@ -118,7 +135,7 @@ public class Explorer {
     }
 
     else if (direction == Direction.RIGHT){
-      direction = Direction.LEFT;
+      direction = Direction.DOWN;
     }
   }
 

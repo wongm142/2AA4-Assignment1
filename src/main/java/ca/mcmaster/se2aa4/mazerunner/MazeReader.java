@@ -42,11 +42,12 @@ public class MazeReader {
                 }
             }
 
-
             maze.addLine(line);
         }
 
         read.close();
+
+        maze.printMaze();
 
         return maze;
     }

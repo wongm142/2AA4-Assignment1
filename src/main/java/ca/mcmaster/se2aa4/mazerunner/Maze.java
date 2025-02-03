@@ -2,6 +2,7 @@ package ca.mcmaster.se2aa4.mazerunner;
 import java.util.ArrayList;
 
 public interface Maze {
+    public void printMaze();
     public void addLine(ArrayList<Tile> lineInput);
     public int height();
     public int width();
