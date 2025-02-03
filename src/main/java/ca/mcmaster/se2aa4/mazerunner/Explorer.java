@@ -17,7 +17,7 @@ public class Explorer {
   private TraversalLogger pathLogger;
   private EntranceFinder finder;
 
-  public Explorer(Maze mazeInput) throws EntranceException, ExitException {
+  public Explorer(Maze mazeInput) throws EntranceException {
     maze = mazeInput;
     finder = new EntranceFinder(mazeInput);
     pathLogger = new TraversalLogger();

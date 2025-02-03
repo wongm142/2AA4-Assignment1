@@ -7,7 +7,7 @@ public class PathValidator {
 		maze = mazeInput;
 	}
 
-	public boolean checkPath(String path) throws EntranceException, ExitException {
+	public boolean checkPath(String path) throws EntranceException {
 		explorer = new Explorer(maze);
 
 		boolean correctEast = runPath(path, explorer);
@@ -69,7 +69,7 @@ public class PathValidator {
             if (maze.getPoint(explorer.coords()) == Tile.WALL) {
                 return false;
             }
-            
+
             explorer.moveForward();
             break;
 

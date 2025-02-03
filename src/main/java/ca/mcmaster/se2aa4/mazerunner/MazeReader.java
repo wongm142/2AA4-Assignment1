@@ -14,7 +14,7 @@ public class MazeReader {
     }
 
     public Maze readMaze() throws FileNotFoundException, IOException {
-        Maze maze = new Maze();
+        Maze maze = new ArrayListMaze();
 
         BufferedReader read = new BufferedReader(new FileReader(mazeFile));
         String lineInput;
