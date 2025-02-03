@@ -28,14 +28,28 @@ public class Main {
             MazeReader reader = new MazeReader(config.inputMaze());
             Maze maze = reader.readMaze();
 
-            logger.info("**** Computing path");
-            MazeSolver solver = new RightHandAlgo();
-            String solution = solver.solveMaze(maze);
+            if (config.hasPath()) {
+                logger.info("**** Checking path");
+                PathValidator checker = new PathValidator(maze);
+                boolean checkResult = checker.checkPath(config.inputPath());
+                
+                if (checkResult) {
+                    System.out.println("Your input solution is correct!");
+                } 
+                
+                else {
+                    System.out.println("Your input solution is incorrect.");
+                }
+            } 
+            
+            else {
+                logger.info("**** Computing path");
+                MazeSolver solver = new RightHandAlgo();
+                String solution = solver.solveMaze(maze);
+                System.out.println("Solution: " + solution);
+            }
 
-            System.out.println("Solution: " + solution);
-        } 
-        
-        catch(Exception e) {
+        } catch(IOException | ParseException | EntranceException | ExitException e) {
             logger.error(e.getMessage());
             System.exit(1);
         }
@@ -45,16 +59,19 @@ public class Main {
 
     private static Configuration configure(String[] args) throws ParseException{
         Options options = new Options();
-        options.addOption("i", true, "i flag");
+        options.addOption("i", true, "flag for maze file location");
+        options.addOption("p", true, "flag for path checking");
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
 
         String maze = cmd.getOptionValue("i");
+        boolean hasPath = cmd.hasOption("p");
+        String path = cmd.getOptionValue("p");
 
-        return new Configuration(maze);
+        return new Configuration(maze, path, hasPath);
     }
 
-    private record Configuration(String inputMaze) {}
+    private record Configuration(String inputMaze, String inputPath, boolean hasPath) {}
 
 }

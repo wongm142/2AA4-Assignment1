@@ -39,6 +39,11 @@ public class TraversalLogger {
         }
     }
 
+    public void clear() {
+        path.clear();
+        lastMove = Move.NONE;
+    }
+
     public String getCanonical() {
         String canonical = "";
         for (ArrayList<Character> chain : path) {

@@ -11,6 +11,7 @@ public class Explorer {
   private Maze maze;
   private Coordinate coords;
   private Direction direction;
+  private SolveDirection solvingDirection;
   private Coordinate startCoords;
   private Coordinate endCoords;
   private TraversalLogger pathLogger = new TraversalLogger();
@@ -27,6 +28,8 @@ public class Explorer {
 
     coords = new Coordinate(startCoords);
     logger.info("Coordinates are: " + coords.toString());
+
+    solvingDirection = SolveDirection.EAST;
   }
 
   private int findStart() throws EntranceException {
@@ -53,6 +56,36 @@ public class Explorer {
     
     throw new ExitException("Unable to find maze exit");
 
+  }
+
+  public void switchSides() {
+    Coordinate startNew = new Coordinate(endCoords);
+    Coordinate endNew = new Coordinate(startCoords);
+    startCoords = startNew;
+    endCoords = endNew;
+    
+    if (solvingDirection == SolveDirection.EAST) {
+      direction = Direction.LEFT;
+      solvingDirection = SolveDirection.WEST;
+    } 
+    
+    else {
+      direction = Direction.RIGHT;
+      solvingDirection = SolveDirection.EAST;
+    }
+  }
+  
+  public void reset() {
+    coords = new Coordinate(startCoords);
+    pathLogger.clear();
+    
+    if (solvingDirection == SolveDirection.EAST) {
+      direction = Direction.RIGHT;
+    } 
+    
+    else {
+      direction = Direction.LEFT;
+    }
   }
 
   public Coordinate coords() {
@@ -145,4 +178,8 @@ public class Explorer {
 
 enum Direction {
   UP, DOWN, LEFT, RIGHT
+}
+
+enum SolveDirection {
+  EAST, WEST
 }
